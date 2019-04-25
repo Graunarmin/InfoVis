@@ -41,13 +41,13 @@ public class View extends JPanel{
 	    Graphics2D g2D = (Graphics2D) g;
 	    g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);  //Antialiasing
 	    g2D.clearRect(0, 0, getWidth(), getHeight());  //Delete everything before update
-	  
+	   
 	    g2D.scale(scale, scale);  //Scales big diagram
-	    
+	    g2D.translate(-translateX, -translateY);
 	    paintDiagram(g2D);  //Draws big diagram 
 	    
 	    g2D.scale(1/scale, 1/scale);  //Takes scale away for tiny blobs and overview
-	    //g2D.translate(translateX, translateY);  //Theoretisch weg um fenster zu bewegen
+	    g2D.translate(translateX, translateY);  //Theoretisch weg um fenster zu bewegen
 	    g2D.setColor(Color.WHITE);  //Sets background color for overviewRect
 	    g2D.fill(overviewRect);    //Fills overviewRect
 	    g2D.setColor(Color.BLACK);  //Sets frame for overviewRect
@@ -60,7 +60,7 @@ public class View extends JPanel{
 	    
 	    g2D.setColor(Color.RED); //Sets frame of marker
 	    marker.setRect(0,0,getWidth(),getHeight());  //Adjusts marker to size of window
-	    g2D.translate(translateX, translateY);  //Let's you move marker around (but always jumps back-.-)
+	    g2D.translate(translateX, translateY);  //Let's you move marker around 
 	    g2D.draw(marker);  //Draw marker
 	    
 	    

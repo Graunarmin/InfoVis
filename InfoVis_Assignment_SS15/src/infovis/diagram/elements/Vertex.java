@@ -15,7 +15,7 @@ public class Vertex implements Element {
 	public static final double STD_HEIGHT = 20;
 
 	private String text = "Neues Label";
-	private Color color = Color.BLUE; //Farbe der Ellipsen
+	private Color color = Color.PINK; //Farbe der Ellipsen
 	private Color background = Color.WHITE;
 	private Font font = new Font("sansserif", Font.BOLD, 12);
 	RectangularShape shape ;
@@ -50,7 +50,7 @@ public class Vertex implements Element {
 		//Debug.print("paint Vertex");
 		g2D.setColor(color);
 		g2D.fill(shape);
-		g2D.setColor(Color.RED); //Outlinecolor
+		g2D.setColor(Color.PINK); //Outlinecolor
 		g2D.draw(shape);
 	}
 
