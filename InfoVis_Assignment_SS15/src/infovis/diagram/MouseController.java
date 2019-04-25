@@ -171,6 +171,8 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		/*
 		 * Aufgabe 1.2
 		 */
+		view.updateTranslation((x-mouseOffsetX)/scale, (y-mouseOffsetY)/scale);  //Marker off set merken damit es nicht immer zurück springt
+		
 		if (fisheyeMode){
 			/*
 			 * handle fisheye mode interactions

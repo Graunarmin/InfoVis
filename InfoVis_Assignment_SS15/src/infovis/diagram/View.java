@@ -15,12 +15,12 @@ import javax.swing.JPanel;
 
 public class View extends JPanel{
 	private Model model = null;
-	private Color color = Color.WHITE; //background color frame
-	private double scale = 2;
+	private Color color = Color.PINK; //background color frame
+	private double scale = 1;
 	private double translateX= 0;
 	private double translateY=0;
-	private Rectangle2D marker = new Rectangle2D.Double();
-	private Rectangle2D overviewRect = new Rectangle2D.Double(550, 50, 200, 180);   //(x,y, height, width)
+	private Rectangle2D marker = new Rectangle2D.Double(0,0,0,0);
+	private Rectangle2D overviewRect = new Rectangle2D.Double(550, 50, 240, 125);   //(x,y, height, width)
 
 	public Model getModel() {
 		return model;
@@ -37,27 +37,33 @@ public class View extends JPanel{
 
 	
 	public void paint(Graphics g) {
-		
-		Graphics2D g2D = (Graphics2D) g;
-		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-		g2D.clearRect(0, 0, getWidth(), getHeight()); //position: 0,0
-		
-		// paint big diagram
-		paintDiagram(g2D); 
-		
-		//paint overview window
-		g2D.setColor(color);
-		g2D.fill(overviewRect);
-		g2D.setColor(Color.BLUE); //Outlinecolor, because we don't fill it, so it paints over the color we filled the object with before
-		g2D.draw(overviewRect);
-		
-		//scale and translate the blobs so they fit into the overview window
-		g2D.translate(550, 50);
-		g2D.scale(0.2, 0.2);
-		
-		//paint smaller diagram into overview window
-		paintDiagram(g2D);
-		
+	    
+	    Graphics2D g2D = (Graphics2D) g;
+	    g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);  //Antialiasing
+	    g2D.clearRect(0, 0, getWidth(), getHeight());  //Delete everything before update
+	  
+	    g2D.scale(scale, scale);  //Scales big diagram
+	    
+	    paintDiagram(g2D);  //Draws big diagram 
+	    
+	    g2D.scale(1/scale, 1/scale);  //Takes scale away for tiny blobs and overview
+	    //g2D.translate(translateX, translateY);  //Theoretisch weg um fenster zu bewegen
+	    g2D.setColor(Color.WHITE);  //Sets background color for overviewRect
+	    g2D.fill(overviewRect);    //Fills overviewRect
+	    g2D.setColor(Color.BLACK);  //Sets frame for overviewRect
+	    g2D.draw(overviewRect);
+	    
+	    g2D.translate(575, 50);  //Moves &
+	    g2D.scale(0.17, 0.17);  //Scales the blobs
+	    
+	    paintDiagram(g2D);  //repaint to get second set of blobs
+	    
+	    g2D.setColor(Color.RED); //Sets frame of marker
+	    marker.setRect(0,0,getWidth(),getHeight());  //Adjusts marker to size of window
+	    g2D.translate(translateX, translateY);  //Let's you move marker around (but always jumps back-.-)
+	    g2D.draw(marker);  //Draw marker
+	    
+	    
 	}
 	private void paintDiagram(Graphics2D g2D){
 		for (Element element: model.getElements()){
