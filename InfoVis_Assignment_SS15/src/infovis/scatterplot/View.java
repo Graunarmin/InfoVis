@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 public class View extends JPanel {
 	     private Model model = null;
-	     private Rectangle2D markerRectangle = new Rectangle2D.Double(0,0,0,0); 
+	     private Rectangle2D markerRectangle = new Rectangle2D.Double(0,0,500,500); 
 
 		 public Rectangle2D getMarkerRectangle() {
 			return markerRectangle;
@@ -19,18 +19,23 @@ public class View extends JPanel {
 		@Override
 		public void paint(Graphics g) {
 
-	        for (String l : model.getLabels()) {
-				Debug.print(l);
+			Graphics2D g2D = (Graphics2D) g;
+			
+			g2D.draw(markerRectangle);
+			
+	        for (String l : model.getLabels()) {//Categories 
+				Debug.print(l + "*");
 				Debug.print(",  ");
-				Debug.println("");
+				Debug.println("");	//New line
+				
 			}
 			for (Range range : model.getRanges()) {
-				Debug.print(range.toString());
+				Debug.print(range.toString() + "+");
 				Debug.print(",  ");
 				Debug.println("");
 			}
 			for (Data d : model.getList()) {
-				Debug.print(d.toString());
+				Debug.print(d.toString() + "#");
 				Debug.println("");
 			}
 	        
