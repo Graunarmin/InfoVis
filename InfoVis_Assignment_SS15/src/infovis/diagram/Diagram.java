@@ -9,6 +9,7 @@ import javax.swing.SwingUtilities;
  * @author patrick.riehmann(at)medien.uni-weimar.de
  */
 
+@SuppressWarnings("MagicConstant")
 public class Diagram {
     
 	private MouseController controller = null;

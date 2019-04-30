@@ -171,8 +171,10 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		/*
 		 * Aufgabe 1.2
 		 */
-		
-		view.updateTranslation((x-mouseOffsetX)/scale, (y-mouseOffsetY)/scale);  //Marker off set merken damit es nicht immer zurück springt
+
+		//Bewegen & Zoomen des Diagramms
+		//(Marker Offset merken, damit es nicht immer zurück springt!)
+		view.updateTranslation((x-mouseOffsetX)/scale, (y-mouseOffsetY)/scale);
 		
 		if (fisheyeMode){
 			/*
