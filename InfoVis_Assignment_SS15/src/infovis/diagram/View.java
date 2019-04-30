@@ -56,17 +56,21 @@ public class View extends JPanel{
 	    g2D.draw(overviewRect);
 	    
 	    //Tiny blobs in overview window:
-	    g2D.translate(575, 50);  //Moves &
+	    g2D.translate(575, 50);  //Moves the tiny blobs (and that way also to marker) into the overview window &
 	    g2D.scale(0.17, 0.17);  //Scales the blobs
 	    
 	    paintDiagram(g2D);  //repaint to get second set of blobs
-	    
+
+		//Skalierung invertieren??
+		// g2D.scale(1/0.17, 1/0.17);
+
 	    //Marker
 	    g2D.setColor(Color.RED); //Sets frame of marker
 	    marker.setRect(0,0,getWidth(),getHeight());  //Adjusts marker to size of window
 	    g2D.scale(1/scale, 1/scale);	//Scale marker so it fits with the zooming
 	    g2D.translate(translateX, translateY);  //Let's you move marker around 
 	    g2D.draw(marker);  //Draw marker
+
 	    
 	    
 	}

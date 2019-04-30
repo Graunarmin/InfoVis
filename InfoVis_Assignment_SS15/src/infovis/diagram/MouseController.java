@@ -174,6 +174,7 @@ public class MouseController implements MouseListener,MouseMotionListener {
 
 		//Bewegen & Zoomen des Diagramms
 		//(Marker Offset merken, damit es nicht immer zurück springt!)
+		// vom Ursprung des Markers zum Ursprung des Overviews mitbeachten! und mitskalieren,
 		view.updateTranslation((x-mouseOffsetX)/scale, (y-mouseOffsetY)/scale);
 		
 		if (fisheyeMode){
