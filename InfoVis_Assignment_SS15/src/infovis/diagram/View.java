@@ -45,8 +45,9 @@ public class View extends JPanel{
 	    //move and scale the original blobs:
 	    g2D.scale(scale, scale);  //Scales big diagram (Zooming)
 	    g2D.translate(-translateX, -translateY);	//Move blobs like the move but the other way
-	    paintDiagram(g2D);  //Draws big diagram 
-	    
+	    paintDiagram(g2D);  //Draws big diagram
+
+
 	    //overview window
 	    g2D.translate(translateX, translateY);  //Translate the overviewRect back so it stays in the same place
 	    g2D.scale(1/scale, 1/scale);  //Takes scale away for tiny blobs and overview
@@ -66,9 +67,9 @@ public class View extends JPanel{
 
 	    //Marker
 	    g2D.setColor(Color.RED); //Sets frame of marker
-	    marker.setRect(0,0,getWidth(),getHeight());  //Adjusts marker to size of window
+		updateMarker(0,0); //Adjusts marker to size of window
 	    g2D.scale(1/scale, 1/scale);	//Scale marker so it fits with the zooming
-	    g2D.translate(translateX, translateY);  //Let's you move marker around 
+		g2D.translate(translateX, translateY);  //Let's you move marker around
 	    g2D.draw(marker);  //Draw marker
 
 	    
@@ -103,7 +104,7 @@ public class View extends JPanel{
 		setTranslateY(y);
 	}	
 	public void updateMarker(int x, int y){
-		marker.setRect(x, y, 16, 10);
+		marker.setRect(x, y, getWidth(), getHeight());
 	}
 	public Rectangle2D getMarker(){
 		return marker;

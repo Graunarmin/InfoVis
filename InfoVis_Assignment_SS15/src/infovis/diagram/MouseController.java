@@ -23,6 +23,8 @@ public class MouseController implements MouseListener,MouseMotionListener {
 	 private Element selectedElement = new None();
 	 private double mouseOffsetX;
 	 private double mouseOffsetY;
+	 private double markerX;
+	 private double markerY;
 	 private boolean edgeDrawMode = false;
 	 private DrawingEdge drawingEdge = null;
 	 private boolean fisheyeMode;
@@ -107,8 +109,13 @@ public class MouseController implements MouseListener,MouseMotionListener {
 			/*
 			 * calculate offset
 			 */
+			//Mouse Offset:
 			mouseOffsetX = x - selectedElement.getX() * scale ;
-			mouseOffsetY = y - selectedElement.getY() * scale ;	
+			mouseOffsetY = y - selectedElement.getY() * scale ;
+
+		   	//Marker Offset merken, damit es nicht immer zurück springt!
+			markerX = view.getTranslateX();
+			markerY = view.getTranslateY();
 		}
 		
 	}
@@ -173,9 +180,9 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		 */
 
 		//Bewegen & Zoomen des Diagramms
-		//(Marker Offset merken, damit es nicht immer zurück springt!)
+		// Marker Offset merken, damit es nicht immer zurück springt!
 		// vom Ursprung des Markers zum Ursprung des Overviews mitbeachten! und mitskalieren,
-		view.updateTranslation((x-mouseOffsetX)/scale, (y-mouseOffsetY)/scale);
+		view.updateTranslation((markerX + (x-mouseOffsetX)), (markerY + (y-mouseOffsetY)));
 		
 		if (fisheyeMode){
 			/*
