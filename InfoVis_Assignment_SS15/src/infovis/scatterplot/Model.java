@@ -67,7 +67,7 @@ public class Model {
 				 for (int i = 1; i < l.length; i++) labels.add(l[i]); // import labels excluding name
 				 setDim(l.length-1);
 				 
-				  // Prepare Ranges
+				  // Prepare Ranges (smallest and greatest value
 				 double lowRanges [] = new double[l.length-1];
 				 for (int i = 0; i < lowRanges.length; i++) lowRanges[i] = Double.MAX_VALUE;
 				 double highRanges [] = new double[lowRanges.length];
