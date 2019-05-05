@@ -14,9 +14,9 @@ import javax.swing.JPanel;
 public class View extends JPanel {
 	     private Model model = null;
 	     private Rectangle2D markerRectangle = new Rectangle2D.Double(0,0,0,0);
-	     private Rectangle2D matrixFrame = new Rectangle2D.Double(100,25,650,650);
-	     private Line2D horizontalSegmentLine = new Line2D.Double(100,25,750,25);
-	     private Line2D verticalSegmentLine = new Line2D.Double(100,32,100,681);
+	     private Rectangle2D matrixFrame = new Rectangle2D.Double(120,25,650,650);
+	     private Line2D horizontalSegmentLine = new Line2D.Double(120,25,770,25);
+	     private Line2D verticalSegmentLine = new Line2D.Double(120,32,120,681);
 
 		 public Rectangle2D getMarkerRectangle() {
 			return markerRectangle;
@@ -67,7 +67,7 @@ public class View extends JPanel {
 
 			//Horizontal labels
 			for (String l : model.getLabels()) {
-				g2D.drawString(l,180+i,25);	//Draws labels starting at position and height
+				g2D.drawString(l,170+i,25);	//Draws labels starting at position and height
 				i += (650/(dim-2));	//moves next label a bit to the right
 			}
 
@@ -77,7 +77,7 @@ public class View extends JPanel {
 
 			//Vertical labels
 			for (String l : model.getLabels()) {
-				g2D.drawString(l, 1150, 100 + j);
+				g2D.drawString(l, /*1150*/ 15, 100 + j);
 				j += (650 / (dim - 2));
 			}
 

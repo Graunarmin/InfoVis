@@ -52,9 +52,9 @@ public class Model {
 	
 	public void importValues() {
 		//File file = new File("InfoVis_Assignment_SS15/cameras.ssv");
-		//File file = new File("InfoVis_Assignment_SS15/cars.ssv");
+		File file = new File("InfoVis_Assignment_SS15/cars.ssv");
 		//File file = new File("cameras.ssv");
-		File file = new File("cars.ssv");
+		//File file = new File("cars.ssv");
 	    Debug.p(file.getAbsoluteFile().toString());
 	   
 	    try {
@@ -65,7 +65,7 @@ public class Model {
 	        	 thisLine = br.readLine();
 				 String l [] = thisLine.split(";");
 				 for (int i = 1; i < l.length; i++) labels.add(l[i]); // import labels excluding name
-				 setDim(l.length-1);
+				 setDim(l.length-1);	//Set dimension here
 				 
 				  // Prepare Ranges (smallest and greatest value
 				 double lowRanges [] = new double[l.length-1];
