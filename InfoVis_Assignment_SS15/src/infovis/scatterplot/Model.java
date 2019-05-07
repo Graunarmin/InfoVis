@@ -61,17 +61,29 @@ public class Model {
 	    	 String thisLine = null;
 	    	 BufferedReader br = new BufferedReader(new FileReader(file));
 	         try {
+
 	        	 //Import Labels
 	        	 thisLine = br.readLine();
 				 String l [] = thisLine.split(";");
-				 for (int i = 1; i < l.length; i++) labels.add(l[i]); // import labels excluding name
-				 setDim(l.length-1);	//Set dimension here
+
+				 //import labels excluding name
+				 for (int i = 1; i < l.length; i++) {
+				 	labels.add(l[i]);
+				 }
+
+				 //Set dimension here
+				 setDim(l.length-1);
 				 
-				  // Prepare Ranges (smallest and greatest value
+				  // Prepare Ranges (smallest and greatest value)
 				 double lowRanges [] = new double[l.length-1];
-				 for (int i = 0; i < lowRanges.length; i++) lowRanges[i] = Double.MAX_VALUE;
+				 for (int i = 0; i < lowRanges.length; i++) {
+				 	lowRanges[i] = Double.MAX_VALUE;
+				 }
+
 				 double highRanges [] = new double[lowRanges.length];
-			     for (int i = 0; i < highRanges.length; i++) highRanges[i] = Double.MIN_VALUE;
+			     for (int i = 0; i < highRanges.length; i++){
+			     	highRanges[i] = Double.MIN_VALUE;
+				 }
 	        	 
 	        	 // Import Data and adapt Ranges
 				 while ((thisLine = br.readLine()) != null) { // while loop begins here
