@@ -1,6 +1,7 @@
 package infovis.scatterplot;
 
 import infovis.debug.Debug;
+import javafx.scene.control.Cell;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -22,9 +23,11 @@ public class View extends JPanel {
 	     //Matrix scaffold
 	     private static final int WIDTH = 650;
 	     private static final int HEIGHT = 650;
-	     private Rectangle2D matrixFrame = new Rectangle2D.Double(120,25, WIDTH, HEIGHT);
-	     private Line2D horizontalSegmentLine = new Line2D.Double(120,25, 120 + WIDTH,25);
-	     private Line2D verticalSegmentLine = new Line2D.Double(120,32,120, 32 + HEIGHT - 1);
+	     private static final int XOFFSET = 120;
+	     private static final int YOFFSET = 25;
+	     private Rectangle2D matrixFrame = new Rectangle2D.Double(XOFFSET, YOFFSET, WIDTH, HEIGHT);
+	     private Line2D horizontalSegmentLine = new Line2D.Double(XOFFSET, YOFFSET, XOFFSET + WIDTH,YOFFSET);
+	     private Line2D verticalSegmentLine = new Line2D.Double(XOFFSET,YOFFSET + 7, XOFFSET, YOFFSET + 7 + HEIGHT - 1);
 
 	     //Marker
 		 private Rectangle2D markerRectangle = new Rectangle2D.Double(0,0,0,0);
@@ -33,55 +36,13 @@ public class View extends JPanel {
 			return markerRectangle;
 		}
 
-		private Map<String, ArrayList<Point2D>> labelsAndPoints = new HashMap<String, ArrayList<Point2D>>();
-	    private ArrayList<Range> ranges = new ArrayList<Range>();
-
-		public void getPoints(){
-
-			for(Range r : model.getRanges()){
-				ranges.add(r);
-			}
-
-
-			// x und y Werte für jeden Punkt berechnen.
-			// getList gibt eine Liste zurück, die für jeden Eintrag je das Label, eine Liste mit Values (und eine Farbe?) enthält
-			for(Data d : model.getList()) {
-				for(int x = 0; x < model.getDim(); ++x){
-					for(int y = 0; y < model.getDim(); ++y){
-
-						int PointX = computeX(ranges.get(x), 25+(WIDTH/model.getDim())*x, d.getValue(x));
-						int PointY = computeY(ranges.get(y), 120 + (HEIGHT/model.getDim())*y, d.getValue(y));
-
-						Point2D point = new Point2D.Double(PointX, PointY);
-					}
-				}
-			}
-		}
-
-		//Ausgelagerte Funktionen, um zu berechnen, wo die Punkte liegen müssen
-		//(anhand der Range, also der kleinste bis der größter Wert, die in der Kategorie vorkommen)
-		public int computeX(Range range, int x, double value){
-			double width = range.getMax() - range.getMin();
-			double verteilung =  (WIDTH/model.getDim()) /width;
-			double schrittweite = (value - range.getMin());
-			int xCoordinate = (int) (x + schrittweite * verteilung);
-			return xCoordinate;
-		}
-
-		public int computeY(Range range, int y, double value){
-			double height = range.getMax() - range.getMin();
-			double verteilung = (HEIGHT/model.getDim()) / height;
-			double schrittweite = (value - range.getMin());
-			int yCoordinate = (int) (y + schrittweite * verteilung);
-			return yCoordinate;
-		}
-
 		// Paint Methode
 		@Override
 		public void paint(Graphics g) {
 
 		 	int dim = model.getDim(); // = Amount of Labels
-		 	int segmentLineDistance = WIDTH / dim;
+		 	int cellWidth = WIDTH / dim;
+		 	int cellHeight = HEIGHT / dim;
 			ArrayList<Data> data = model.getList();
 			ArrayList<Point2D> dataPoints = new ArrayList<Point2D>();
 
@@ -94,7 +55,7 @@ public class View extends JPanel {
 
 			//draw the horizontal lines into the matrix
 			for (int i = 0; i < dim; i++){
-				g2D.translate(0, segmentLineDistance);
+				g2D.translate(0, cellWidth);
 
 				//taking out the last line while keeping the right distances
 				if(i != dim -1){
@@ -107,7 +68,7 @@ public class View extends JPanel {
 
 			//draw the vertical lines into the matrix
 			for (int i = 0; i < dim; i++){	//Cheating a bit by taking out the last line so it doesn't look ugly
-				g2D.translate(segmentLineDistance, 0);
+				g2D.translate(cellWidth, 0);
 
 				//taking out the last line while keeping the right distances
 				if(i != dim-1){
@@ -138,15 +99,37 @@ public class View extends JPanel {
 				j += (650 / (dim - 2));
 			}
 
-			for(int a = 0; a < dim; ++a){
-				for(int b = 0; b < dim; ++b){
+			//Matrix Zellen:
+			// (0,0) | (0,1) | (0,2) | (0,3) | ...
+			// (1,0) | (1,1) | (1,2) | (1,3) | ...
+			// (2,0) | (2,1) | (2,2) | (2,3) | ...
+			// ...
 
+			for(int y = 0; y < dim; ++y){
+				for(int x = 0; x < dim; ++x){
+
+					ArrayList<Double> xData = new ArrayList<>();
+					ArrayList<Double> yData = new ArrayList<>();
 
 					for(Data d: data) {
+						xData.add(d.getValue(x));
+						yData.add(d.getValue(y));
 
-						Point2D dataPoint = new Point2D.Double((int)(d.getValue(a) + 25),
-								(int) (d.getValue(b)) + 120);
 
+
+//						Point2D dataPoint = new Point2D.Double((int)(d.getValue(a) + 25),
+//								(int) (d.getValue(b)) + 120);
+//
+//						dataPoints.add(dataPoint);
+					}
+
+					//get coordinates
+					CellData celldata = new CellData(xData, yData, cellWidth, cellHeight);
+					ArrayList<Integer> xCoords = celldata.getPointXCoordinates(x, XOFFSET);
+					ArrayList<Integer> yCoords = celldata.getPointYCoordinates(y, YOFFSET);
+
+					for(int c = 0; c < xCoords.size(); c++){
+						Point2D dataPoint = new Point2D.Double(xCoords.get(c), yCoords.get(c));
 						dataPoints.add(dataPoint);
 					}
 				}
