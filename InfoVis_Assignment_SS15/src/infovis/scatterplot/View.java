@@ -10,9 +10,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.jar.Attributes;
 
 import javax.swing.JPanel;
 
@@ -36,6 +33,10 @@ public class View extends JPanel {
 			return markerRectangle;
 		}
 
+		public void setMarkerRectangle(int x, int y, double width, double height){
+			markerRectangle.setRect(x, y, width, height);
+		}
+
 		// Paint Methode
 		@Override
 		public void paint(Graphics g) {
@@ -49,6 +50,12 @@ public class View extends JPanel {
 
 			Graphics2D g2D = (Graphics2D) g;
 			g2D.clearRect(0, 0, getWidth(), getHeight());  //Delete everything before update
+
+			//draw marker Rectangle
+			g2D.setColor(Color.RED);
+			g2D.draw(markerRectangle);
+			g2D.setColor(Color.BLACK);
+
 
 			//Matrix Frame
 			g2D.draw(matrixFrame);
@@ -105,29 +112,24 @@ public class View extends JPanel {
 			// (2,0) | (2,1) | (2,2) | (2,3) | ...
 			// ...
 
+			//run through the matrix line by line (cell index [x,y])
 			for(int y = 0; y < dim; ++y){
 				for(int x = 0; x < dim; ++x){
 
+					//get the right combination of Data for each cell
 					ArrayList<Double> xData = new ArrayList<>();
 					ArrayList<Double> yData = new ArrayList<>();
-
 					for(Data d: data) {
 						xData.add(d.getValue(x));
 						yData.add(d.getValue(y));
-
-
-
-//						Point2D dataPoint = new Point2D.Double((int)(d.getValue(a) + 25),
-//								(int) (d.getValue(b)) + 120);
-//
-//						dataPoints.add(dataPoint);
 					}
 
 					//get coordinates
 					CellData celldata = new CellData(xData, yData, cellWidth, cellHeight);
-					ArrayList<Integer> xCoords = celldata.getPointXCoordinates(x, XOFFSET);
-					ArrayList<Integer> yCoords = celldata.getPointYCoordinates(y, YOFFSET);
+					ArrayList<Integer> xCoords = celldata.getPointXCoordinates(x, XOFFSET + 20);
+					ArrayList<Integer> yCoords = celldata.getPointYCoordinates(y, YOFFSET );
 
+					//combine the coordinates to create points, store points in an array
 					for(int c = 0; c < xCoords.size(); c++){
 						Point2D dataPoint = new Point2D.Double(xCoords.get(c), yCoords.get(c));
 						dataPoints.add(dataPoint);
@@ -135,9 +137,23 @@ public class View extends JPanel {
 				}
 			}
 
-			for(int k = 0; k <dataPoints.size(); ++k) {
-				g2D.setColor(data.get(k % data.size()).getColor());
-				g2D.drawOval( (int) dataPoints.get(k).getX() - 3, (int) dataPoints.get(k).getY() - 3, 6, 6);
+			//draw point array
+			for(Point2D point : dataPoints) {
+				g2D.setColor(Color.BLUE);
+				g2D.drawOval((int) point.getX(), (int) point.getY(), 4, 4);
+				//g2D.fillOval((int) point.getX(), (int) point.getY(), 4, 4);
+			}
+
+
+			for(Point2D point : dataPoints) {
+				if(markerRectangle.contains(point)){
+					for(Point2D p : dataPoints) {
+						g2D.setColor(Color.ORANGE);
+						g2D.drawOval((int) p.getX(), (int) p.getY(), 5, 5);
+						g2D.fillOval((int) p.getX(), (int) p.getY(), 5, 5);
+					}
+
+				}
 			}
 
 
