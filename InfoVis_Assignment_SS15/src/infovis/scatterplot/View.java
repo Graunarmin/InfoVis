@@ -9,6 +9,9 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.jar.Attributes;
 
 import javax.swing.JPanel;
 
@@ -29,7 +32,49 @@ public class View extends JPanel {
 		 public Rectangle2D getMarkerRectangle() {
 			return markerRectangle;
 		}
-		 
+
+		private Map<String, ArrayList<Point2D>> points = new HashMap<String, ArrayList<Point2D>>();
+	    private ArrayList<Range> ranges = new ArrayList<Range>();
+
+		public void getPoints(){
+
+			for(Range r : model.getRanges()){
+				ranges.add(r);
+			}
+
+
+			// x und y Werte für jeden Punkt berechnen.
+			// getList gibt eine Liste zurück, die für jeden Eintrag je das Label, eine Liste mit Values (und eine Farbe?) enthält
+			for(Data d : model.getList()) {
+				for(int x = 0; x < model.getDim(); ++x){
+					for(int y = 0; y < model.getDim(); ++y){
+
+						int PointX = computeX(ranges.get(x), 25+(WIDTH/model.getDim())*x, d.getValue(x));
+						int PointY = computeY(ranges.get(y), 120 + (HEIGHT/model.getDim())*y, d.getValue(y));
+					}
+				}
+			}
+		}
+
+		//Ausgelagerte Funktionen, um zu berechnen, wo die Punkte liegen müssen
+		//(anhand der Range, also der kleinste bis der größter Wert, die in der Kategorie vorkommen)
+		public int computeX(Range range, int x, double value){
+			double width = range.getMax() - range.getMin();
+			double verteilung = width / (WIDTH/model.getDim());
+			double schrittweite = (value - range.getMin());
+			int xCoordinate = (int) (x + schrittweite * verteilung);
+			return xCoordinate;
+		}
+
+		public int computeY(Range range, int y, double value){
+			double width = range.getMax() - range.getMin();
+			double verteilung = width / (WIDTH/model.getDim());
+			double schrittweite = (value - range.getMin());
+			int yCoordinate = (int) (y + schrittweite * verteilung);
+			return yCoordinate;
+		}
+
+		// Paint Methode
 		@Override
 		public void paint(Graphics g) {
 
@@ -99,8 +144,8 @@ public class View extends JPanel {
 
 
 
-						Point2D dataPoint = new Point2D.Double((int) (((d.getValue(a)) * HEIGHT) /   HEIGHT + 50),
-								(int) (((d.getValue(b))) * WIDTH) / ( WIDTH + 50));
+						Point2D dataPoint = new Point2D.Double((int)(d.getValue(a) + 25),
+								(int) (d.getValue(b)) + 120);
 
 						dataPoints.add(dataPoint);
 					}
