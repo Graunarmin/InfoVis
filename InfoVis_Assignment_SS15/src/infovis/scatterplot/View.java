@@ -33,7 +33,7 @@ public class View extends JPanel {
 			return markerRectangle;
 		}
 
-		private Map<String, ArrayList<Point2D>> points = new HashMap<String, ArrayList<Point2D>>();
+		private Map<String, ArrayList<Point2D>> labelsAndPoints = new HashMap<String, ArrayList<Point2D>>();
 	    private ArrayList<Range> ranges = new ArrayList<Range>();
 
 		public void getPoints(){
@@ -51,6 +51,8 @@ public class View extends JPanel {
 
 						int PointX = computeX(ranges.get(x), 25+(WIDTH/model.getDim())*x, d.getValue(x));
 						int PointY = computeY(ranges.get(y), 120 + (HEIGHT/model.getDim())*y, d.getValue(y));
+
+						Point2D point = new Point2D.Double(PointX, PointY);
 					}
 				}
 			}
@@ -60,15 +62,15 @@ public class View extends JPanel {
 		//(anhand der Range, also der kleinste bis der größter Wert, die in der Kategorie vorkommen)
 		public int computeX(Range range, int x, double value){
 			double width = range.getMax() - range.getMin();
-			double verteilung = width / (WIDTH/model.getDim());
+			double verteilung =  (WIDTH/model.getDim()) /width;
 			double schrittweite = (value - range.getMin());
 			int xCoordinate = (int) (x + schrittweite * verteilung);
 			return xCoordinate;
 		}
 
 		public int computeY(Range range, int y, double value){
-			double width = range.getMax() - range.getMin();
-			double verteilung = width / (WIDTH/model.getDim());
+			double height = range.getMax() - range.getMin();
+			double verteilung = (HEIGHT/model.getDim()) / height;
 			double schrittweite = (value - range.getMin());
 			int yCoordinate = (int) (y + schrittweite * verteilung);
 			return yCoordinate;
@@ -141,8 +143,6 @@ public class View extends JPanel {
 
 
 					for(Data d: data) {
-
-
 
 						Point2D dataPoint = new Point2D.Double((int)(d.getValue(a) + 25),
 								(int) (d.getValue(b)) + 120);
