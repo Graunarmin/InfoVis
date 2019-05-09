@@ -17,6 +17,7 @@ public class Model {
 	private ArrayList<Range> ranges = new ArrayList<Range>();
 	private ArrayList<String> labels = new ArrayList<String>();
 	private int dim = 0;
+	String usedFile;
 	
 	public ArrayList<String> getLabels() {
 		return labels;
@@ -48,14 +49,21 @@ public class Model {
 	public void setDim(int dim) {
 		this.dim = dim;
 	}
+
+	public String getUsedFile(){
+		//System.out.println("Used File: " + usedFile);
+		return usedFile;
+	}
 	
 	
 	public void importValues() {
-		//File file = new File("InfoVis_Assignment_SS15/cameras.ssv");
-		File file = new File("InfoVis_Assignment_SS15/cars.ssv");
-		//File file = new File("cameras.ssv");
-		//File file = new File("cars.ssv");
+
+		File file = new File("InfoVis_Assignment_SS15/cameras.ssv");
+		//File file = new File("InfoVis_Assignment_SS15/cars.ssv");
+
 	    Debug.p(file.getAbsoluteFile().toString());
+	    String [] tmp = file.getAbsoluteFile().toString().split("/");
+	    usedFile = tmp[tmp.length-1];
 	   
 	    try {
 	    	 String thisLine = null;

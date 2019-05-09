@@ -86,7 +86,7 @@ public class GUI {
 			jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			jFrame.setJMenuBar(getJJMenuBar());
-			jFrame.setSize(1000, 770);
+			jFrame.setSize(1200, 800);
 			jFrame.setContentPane(getJContentPane());
 			jFrame.setTitle("InfoVisEditor");
 		}
