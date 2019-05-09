@@ -113,10 +113,13 @@ public class View extends JPanel {
 			// ...
 
 			//run through the matrix line by line (cell index [x,y])
+			//In Zelle (0,0) sind die xDaten die Markteinführung und die yDaten auch.
+			//In Zelle (0,1) ist x dann Hubraum, y bleibt Markteinführung, in Zelle (0,2) ist x PS, y bleibt weiter Markteinführung usw.
+			//in der zweiten Zeile ändern sich dann die yDaten, das ist nun Hubraum, und wir gehen wieder alle anderen Kategorien für x durch
 			for(int y = 0; y < dim; ++y){
 				for(int x = 0; x < dim; ++x){
 
-					//get the right combination of Data for each cell
+					//get the right combination of Data for each cell (identified by it's index)
 					ArrayList<Double> xData = new ArrayList<>();
 					ArrayList<Double> yData = new ArrayList<>();
 					for(Data d: data) {

@@ -16,12 +16,7 @@ public class CellData {
     private int cellHeight;
 
 
-    //Constructors
-    public CellData(ArrayList<Double> xData, ArrayList<Double> yData){
-        this.xData = xData;
-        this.yData = yData;
-    }
-
+    //Constructor
     public CellData(ArrayList<Double> xData, ArrayList<Double> yData, int cellWidth, int cellHeight){
         this.xData = xData;
         this.yData = yData;
@@ -39,7 +34,6 @@ public class CellData {
         //get the x coordinates of the points
         OneDCoordinates xCoords = new OneDCoordinates(xData, cellWidth, off);
         return xCoords.getCoordinates();
-
     }
 
     public ArrayList<Integer> getPointYCoordinates(int cellIndex, int offset){
@@ -50,7 +44,6 @@ public class CellData {
         //get y coordinates of the points
         OneDCoordinates yCoords = new OneDCoordinates(yData, cellHeight, off);
         return yCoords.getCoordinates();
-
     }
 
 }

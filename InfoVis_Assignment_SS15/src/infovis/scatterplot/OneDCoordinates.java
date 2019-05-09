@@ -41,20 +41,19 @@ public class OneDCoordinates {
 
         //calculate coordinates
         ArrayList<Integer> coordinates = new ArrayList<Integer>(data.size());
+        double scale = 1;
         if(range == 0){
-            for (int value : coordinates){
-                value = (length/2) + offset;
-            }
-        }else{
-            double scale = (length / range); //* 0.8; //um nicht volle Breite zu nutzen: *0.8
-
-            int i = 0;
-            for(Double v : data){
-                //alles auf Ursprung beziehen: min abziehen
-                double result = ((v - min)/* + (0.1 *length)*/) + offset; // um 10 % vom Ursprung entfernt anzufangen
-                coordinates.add(i, (int)result);
-                i++;
-            }
+            scale = (length/2);
+        }
+        else{
+            scale = (length / range) * 0.8; //um nicht volle Breite zu nutzen: *0.8
+        }
+        int i = 0;
+        for(Double v : data){
+            //alles auf Ursprung beziehen: min abziehen
+            double result = scale *(v - min) + (0.1 * length) + offset; // um 10 % vom Ursprung entfernt anzufangen
+            coordinates.add(i, (int)result);
+            i++;
         }
 
         return coordinates;
