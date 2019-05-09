@@ -46,12 +46,12 @@ public class OneDCoordinates {
                 value = (length/2) + offset;
             }
         }else{
-            double scale = (length / range) * 0.8; //um nicht volle Breite zu nutzen: *0.8
+            double scale = (length / range); //* 0.8; //um nicht volle Breite zu nutzen: *0.8
 
             int i = 0;
             for(Double v : data){
                 //alles auf Ursprung beziehen: min abziehen
-                double result = ((v - min) + (0.1 *length)) + offset; // um 10 % vom Ursprung entfernt anzufangen
+                double result = ((v - min)/* + (0.1 *length)*/) + offset; // um 10 % vom Ursprung entfernt anzufangen
                 coordinates.add(i, (int)result);
                 i++;
             }

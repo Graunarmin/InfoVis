@@ -126,8 +126,8 @@ public class View extends JPanel {
 
 					//get coordinates
 					CellData celldata = new CellData(xData, yData, cellWidth, cellHeight);
-					ArrayList<Integer> xCoords = celldata.getPointXCoordinates(x, XOFFSET + 20);
-					ArrayList<Integer> yCoords = celldata.getPointYCoordinates(y, YOFFSET );
+					ArrayList<Integer> xCoords = celldata.getPointXCoordinates(x, XOFFSET + 60);
+					ArrayList<Integer> yCoords = celldata.getPointYCoordinates(y, YOFFSET + 20);
 
 					//combine the coordinates to create points, store points in an array
 					for(int c = 0; c < xCoords.size(); c++){
