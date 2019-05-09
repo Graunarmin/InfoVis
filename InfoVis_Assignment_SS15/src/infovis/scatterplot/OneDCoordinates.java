@@ -42,16 +42,21 @@ public class OneDCoordinates {
         //calculate coordinates
         ArrayList<Integer> coordinates = new ArrayList<Integer>(data.size());
         double scale = 1;
-        if(range == 0){
-            scale = (length/2);
+        if(range == 0) {
+            //wenn alle Punkte auf einer Linie liegen: in die Mitte holen
+            //scale * 0.8, um nicht die volle Breite der Zelle zu nutzen
+            scale = (length/2) * 0.8;
         }
         else{
-            scale = (length / range) * 0.8; //um nicht volle Breite zu nutzen: *0.8
+            //scale * 0.8, um nicht die volle Breite der Zelle zu nutzen
+            scale = (length/range) * 0.8;
         }
         int i = 0;
         for(Double v : data){
-            //alles auf Ursprung beziehen: min abziehen
-            double result = scale *(v - min) + (0.1 * length) + offset; // um 10 % vom Ursprung entfernt anzufangen
+            //alles auf Ursprung beziehen: min vom value abziehen
+            // length * 0.1 um 10 % vom Ursprung entfernt anzufangen
+            // + offset, um an die richtige Stelle zu verschieben
+            double result = scale * (v - min) + (0.1 * length) + offset;
             coordinates.add(i, (int)result);
             i++;
         }

@@ -74,7 +74,7 @@ public class View extends JPanel {
 			g2D.translate(0, -650);
 
 			//draw the vertical lines into the matrix
-			for (int i = 0; i < dim; i++){	//Cheating a bit by taking out the last line so it doesn't look ugly
+			for (int i = 0; i < dim; i++){	
 				g2D.translate(cellWidth, 0);
 
 				//taking out the last line while keeping the right distances
@@ -98,13 +98,13 @@ public class View extends JPanel {
 
 			int j = 0;
 
-			//g2D.rotate(1.75);	//Theoretically a way to rotate the labels for the sides but every one rotates differently
-
 			//Vertical labels
 			for (String l : model.getLabels()) {
-				g2D.drawString(l, /*1150*/ 15, 100 + j);
+				g2D.drawString(l, 15, 100 + j);
 				j += (650 / (dim - 2));
 			}
+			
+			g2D.scale(1/0.7, 1/0.7);
 
 			//Matrix Zellen:
 			// (0,0) | (0,1) | (0,2) | (0,3) | ...
@@ -116,8 +116,8 @@ public class View extends JPanel {
 			//In Zelle (0,0) sind die xDaten die Markteinführung und die yDaten auch.
 			//In Zelle (0,1) ist x dann Hubraum, y bleibt Markteinführung, in Zelle (0,2) ist x PS, y bleibt weiter Markteinführung usw.
 			//in der zweiten Zeile ändern sich dann die yDaten, das ist nun Hubraum, und wir gehen wieder alle anderen Kategorien für x durch
-			for(int y = 0; y < dim; ++y){
-				for(int x = 0; x < dim; ++x){
+			for(int y = 0; y < dim; y++){
+				for(int x = 0; x < dim; x++){
 
 					//get the right combination of Data for each cell (identified by it's index)
 					ArrayList<Double> xData = new ArrayList<>();
@@ -129,8 +129,8 @@ public class View extends JPanel {
 
 					//get coordinates
 					CellData celldata = new CellData(xData, yData, cellWidth, cellHeight);
-					ArrayList<Integer> xCoords = celldata.getPointXCoordinates(x, XOFFSET + 60);
-					ArrayList<Integer> yCoords = celldata.getPointYCoordinates(y, YOFFSET + 20);
+					ArrayList<Integer> xCoords = celldata.getPointXCoordinates(x, XOFFSET);
+					ArrayList<Integer> yCoords = celldata.getPointYCoordinates(y, YOFFSET);
 
 					//combine the coordinates to create points, store points in an array
 					for(int c = 0; c < xCoords.size(); c++){
