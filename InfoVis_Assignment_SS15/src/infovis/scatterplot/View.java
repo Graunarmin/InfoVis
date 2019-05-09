@@ -46,6 +46,7 @@ public class View extends JPanel {
 		 	int cellHeight = HEIGHT / dim;
 			ArrayList<Data> data = model.getList();
 			ArrayList<Point2D> dataPoints = new ArrayList<Point2D>();
+			ArrayList<String> labels = model.getLabels();
 
 
 			Graphics2D g2D = (Graphics2D) g;
@@ -127,6 +128,8 @@ public class View extends JPanel {
 						yData.add(d.getValue(y));
 					}
 
+					//Map, die zu jedem Punkt den Autonamen (Label) speichert (mit übergeben??)
+
 					//get coordinates
 					CellData celldata = new CellData(xData, yData, cellWidth, cellHeight);
 					ArrayList<Integer> xCoords = celldata.getPointXCoordinates(x, XOFFSET);
@@ -143,19 +146,19 @@ public class View extends JPanel {
 			//draw point array
 			for(Point2D point : dataPoints) {
 				g2D.setColor(Color.BLUE);
-				g2D.drawOval((int) point.getX(), (int) point.getY(), 4, 4);
+				g2D.drawOval((int) point.getX(), (int) point.getY(), 3, 3);
 				//g2D.fillOval((int) point.getX(), (int) point.getY(), 4, 4);
 			}
 
 
 			for(Point2D point : dataPoints) {
 				if(markerRectangle.contains(point)){
-					for(Point2D p : dataPoints) {
+					//labels.get(dataPoints.indexOf(point));
+					for(i = dataPoints.indexOf(point) % 11; i < dataPoints.size(); i += model.getList().size()){
 						g2D.setColor(Color.ORANGE);
-						g2D.drawOval((int) p.getX(), (int) p.getY(), 5, 5);
-						g2D.fillOval((int) p.getX(), (int) p.getY(), 5, 5);
+						g2D.drawOval((int) dataPoints.get(i).getX(), (int) dataPoints.get(i).getY(), 3, 3);
+						g2D.fillOval((int) dataPoints.get(i).getX(), (int) dataPoints.get(i).getY(), 3, 3);
 					}
-
 				}
 			}
 
