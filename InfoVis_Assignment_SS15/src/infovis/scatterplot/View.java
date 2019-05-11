@@ -122,7 +122,6 @@ public class View extends JPanel {
 			//translate it back
 			g2D.translate(- WIDTH, 0);
 
-			//g2D.scale(0.7, 0.7);	//Scales labels down
 			g.setFont (myFont);
 
 			//Horizontal labels
@@ -144,8 +143,6 @@ public class View extends JPanel {
 				g2D.drawString(l, 15, (YOFFSET + cellHeight/2) + j);
 				j += (HEIGHT / dim);
 			}
-			
-			//g2D.scale(1/0.7, 1/0.7);
 
 			//Matrix Zellen:
 			// (0,0) | (0,1) | (0,2) | (0,3) | ...
@@ -199,26 +196,6 @@ public class View extends JPanel {
 					}
 				}
 			}
-
-
-
-			Debug.print("Ranges [smallest and greatest value]: ");
-			Debug.println("");
-			for (Range range : model.getRanges()) {
-
-				Debug.print(range.toString());
-				Debug.print(",  ");
-				Debug.println("");
-			}
-
-			Debug.print("Lists: ");
-			Debug.println("");
-			for (Data d : model.getList()) {
-				Debug.print(d.toString());
-				Debug.println("");
-			}
-			Debug.println("");
-			Debug.print("List Size: " + model.getList().size());
 		}
 
 	public static void drawRotate(Graphics2D g2d, double x, double y, int angle, String text) {
