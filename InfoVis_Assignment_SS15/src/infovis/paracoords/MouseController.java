@@ -12,8 +12,12 @@ public class MouseController implements MouseListener, MouseMotionListener {
 	private Model model = null;
 	Shape currentShape = null;
 	
-	public void mouseClicked(MouseEvent e) {
-		
+	public void mouseClicked(MouseEvent event) {
+		int x = event.getX();
+		int y = event.getY();
+
+		view.setClicked(x,y);
+		view.repaint();
 	}
 
 	public void mouseEntered(MouseEvent e) {

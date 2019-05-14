@@ -6,7 +6,10 @@ import infovis.scatterplot.Data;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+
 
 import javax.swing.JPanel;
 
@@ -20,8 +23,18 @@ public class View extends JPanel {
 	private static final int XOFFST = 50;
 	private static final int YOFFST = 50;
 	private Line2D axis = new Line2D.Double(XOFFST, YOFFST, XOFFST, YOFFST + HEIGHT);
+	private ArrayList<Line2D> connectionLines = new ArrayList<>();
 	private Line2D connectionLine = new Line2D.Double(0,0,0,0);
 	private int cameraOffset = 0;
+	private int clickedX = 0;
+	private int clickedY = 0;
+	private boolean pointClicked = false;
+	private boolean lineClicked = false;
+
+	public void setClicked(int x, int y){
+		clickedX = x;
+		clickedY = y;
+	}
 
 	public void setCameraOffset(){
 		//for camera data the x coords of the points need to be shifted a whee bit to the right
@@ -98,13 +111,65 @@ public class View extends JPanel {
 
 		//draw lines between points to make a path for each object
 		for(Point2D point : dataPoints) {
-			for(i = dataPoints.indexOf(point); i < dataPoints.size() - numberOfEntries; i++){
+			for(int j = dataPoints.indexOf(point); j < dataPoints.size() - numberOfEntries; j++){
 				g2D.setColor(Color.BLUE);
-				connectionLine.setLine(dataPoints.get(i).getX(),dataPoints.get(i).getY(),
-						dataPoints.get(i + numberOfEntries).getX(),dataPoints.get(i + numberOfEntries).getY());
+				connectionLine.setLine(dataPoints.get(j).getX(),dataPoints.get(j).getY(),
+						dataPoints.get(j + numberOfEntries).getX(),dataPoints.get(j + numberOfEntries).getY());
+				connectionLines.add(connectionLine);
 				g2D.draw(connectionLine);
 			}
 		}
+
+		// Highlighting a Path:
+		// If a point was clicked:
+		// (Problem: when point overlap there is only one path highlighted)
+		for(Point2D point: dataPoints){
+			if ((Math.abs(point.getX()-clickedX) <= 5) &&
+					(Math.abs(point.getY()-clickedY) <= 5)){
+				pointClicked = true;
+				for(int p = dataPoints.indexOf(point) % numberOfEntries; p < dataPoints.size(); p += numberOfEntries) {
+					g2D.setColor(Color.ORANGE);
+					g2D.drawOval((int) dataPoints.get(p).getX(), (int) dataPoints.get(p).getY(), 3, 3);
+					g2D.fillOval((int) dataPoints.get(p).getX(), (int) dataPoints.get(p).getY(), 3, 3);
+					if(p <dataPoints.size() - numberOfEntries){
+						connectionLine.setLine(dataPoints.get(p).getX(),dataPoints.get(p).getY(),
+								dataPoints.get(p + numberOfEntries).getX(),dataPoints.get(p + numberOfEntries).getY());
+						g2D.draw(connectionLine);
+					}
+				}
+			}else{
+				pointClicked = false;
+			}
+		}
+
+		if(!pointClicked){
+
+			// If a line was clicked:
+			// NOT WORKING YET
+			for(Line2D line : connectionLines){
+				//add a little tolerance to the clicked point
+				Rectangle2D clicked = new Rectangle(clickedX - 2, clickedY - 2, 4, 4);
+				if(line.intersects(clicked)){
+					lineClicked = true;
+					//for(int l = connectionLines.indexOf(line) % dim; l < dim; l++) {
+					g2D.setColor(Color.ORANGE);
+					g2D.draw(line);
+					//}
+
+				}else{
+					lineClicked = false;
+				}
+			}
+
+			if(!lineClicked){
+				//wenn nichts angeklickt wurde: alles zurücksetzen
+				repaint();
+			}
+		}
+
+
+
+
 	}
 	
 	public static void drawRotate(Graphics2D g2d, double x, double y, int angle, String text) {
