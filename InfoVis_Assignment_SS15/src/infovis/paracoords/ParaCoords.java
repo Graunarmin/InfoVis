@@ -3,6 +3,7 @@ package infovis.paracoords;
 import infovis.gui.GUI;
 import infovis.scatterplot.Model;
 
+
 import javax.swing.SwingUtilities;
 
 public class ParaCoords {

@@ -139,7 +139,7 @@ public class View extends JPanel {
 
 			//Vertical labels
 			int j = 0;
-			for (String l : model.getLabels()) {
+			for (String l : labels) {
 				g2D.drawString(l, 15, (YOFFSET + cellHeight/2) + j);
 				j += (HEIGHT / dim);
 			}
@@ -162,8 +162,13 @@ public class View extends JPanel {
 					ArrayList<Double> yData = new ArrayList<>();
 					for(Data d: data) {
 						xData.add(d.getValue(x));
+						System.out.println("x: ");
+						System.out.println(d.getValue(x));
 						yData.add(d.getValue(y));
+						System.out.println("y: ");
+						System.out.println(d.getValue(y));
 					}
+					System.out.println("-");
 
 					//get coordinates
 					CellData celldata = new CellData(xData, yData, cellWidth, cellHeight);

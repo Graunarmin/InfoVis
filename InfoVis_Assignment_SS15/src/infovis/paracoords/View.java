@@ -1,7 +1,6 @@
 package infovis.paracoords;
 
 import infovis.scatterplot.Model;
-import infovis.scatterplot.CellData;
 import infovis.scatterplot.Data;
 
 import java.awt.*;
@@ -21,6 +20,7 @@ public class View extends JPanel {
 	private static final int XOFFST = 50;
 	private static final int YOFFST = 50;
 	private Line2D axis = new Line2D.Double(XOFFST, YOFFST, XOFFST, YOFFST + HEIGHT);
+	private Line2D connectionLine = new Line2D.Double(0,0,0,0);
 	
 
 	@Override
@@ -30,6 +30,8 @@ public class View extends JPanel {
 		ArrayList<Data> data = model.getList();
 		int dim = model.getDim();
 		int axisDistance = WIDTH / dim;
+		int numberOfEntries = model.getList().size();
+		ArrayList<Point2D> dataPoints = new ArrayList<Point2D>();
 
 		//draw parallel axes (one for each label)
 		for(int a = 0; a < dim; a++){
@@ -50,18 +52,59 @@ public class View extends JPanel {
 			drawRotate(g2D,XOFFST+i,YOFFST-5,-15,l);
 			i += (WIDTH/dim);	//moves next label a bit to the right
 		}
-		
+
+		int xValue = XOFFST;
+		ArrayList<Integer> xCoords = new ArrayList<>();
+
+		for(int x = 0; x < dim; x++){
+			xCoords.add(xValue);
+			xValue += axisDistance;
+		}
+
+		//für jede Achse:
 		for(int y = 0; y < dim; y++){
-			
+
 			ArrayList<Double> yData = new ArrayList<>();
 			for(Data d: data) {
-				
 				yData.add(d.getValue(y));
-				System.out.println(d.getValue(y));
+				//System.out.println(d.getValue(y));
 			}
-			System.out.println("-");
+			//System.out.println("-");
+
+			AxisDataPara axisdata = new AxisDataPara(/*xCoords,*/ yData/*, axisDistance*/, HEIGHT);
+			ArrayList<Integer> yCoords = axisdata.getPointYCoordinates(y, YOFFST);
+			for(int a = 0; a < yCoords.size(); a++){
+				System.out.println(yCoords.get(a));
+			}
+			System.out.println("yCoords size: " + yCoords.size());
+
+			//combine the coordinates to create points, store points in an array
+			for(int c = 0; c < xCoords.size(); c++){
+				Point2D dataPoint = new Point2D.Double(xCoords.get(c), yCoords.get(c));
+				dataPoints.add(dataPoint);
+			}
 			
 		}
+		//draw point array
+		for(Point2D point : dataPoints) {
+			g2D.setColor(Color.BLUE);
+			g2D.drawOval((int) point.getX(), (int) point.getY(), 3, 3);
+			//g2D.fillOval((int) point.getX(), (int) point.getY(), 4, 4);
+		}
+
+		for(Point2D point : dataPoints) {
+
+			//labels.get(dataPoints.indexOf(point));
+			for(i = dataPoints.indexOf(point); i < dataPoints.size() - numberOfEntries; i++){
+				g2D.setColor(Color.ORANGE);
+				connectionLine.setLine(dataPoints.get(i).getX(),dataPoints.get(i).getY(),
+						dataPoints.get(i + numberOfEntries).getX(),dataPoints.get(i + numberOfEntries).getY());
+				g2D.draw(connectionLine);
+			}
+
+		}
+
+
 
 	}
 	
