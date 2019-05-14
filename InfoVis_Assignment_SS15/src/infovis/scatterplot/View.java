@@ -162,13 +162,8 @@ public class View extends JPanel {
 					ArrayList<Double> yData = new ArrayList<>();
 					for(Data d: data) {
 						xData.add(d.getValue(x));
-						System.out.println("x: ");
-						System.out.println(d.getValue(x));
 						yData.add(d.getValue(y));
-						System.out.println("y: ");
-						System.out.println(d.getValue(y));
 					}
-					System.out.println("-");
 
 					//get coordinates
 					CellData celldata = new CellData(xData, yData, cellWidth, cellHeight);

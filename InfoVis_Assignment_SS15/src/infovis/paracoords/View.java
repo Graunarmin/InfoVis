@@ -23,25 +23,26 @@ public class View extends JPanel {
 	private Line2D connectionLine = new Line2D.Double(0,0,0,0);
 	private int cameraOffset = 0;
 
-	public void setScaffold(){
+	public void setCameraOffset(){
 		//for camera data the x coords of the points need to be shifted a whee bit to the right
 		if(model.getUsedFile().equals("cameras.ssv")){
 			cameraOffset = 6;
 		}
 	}
 
-
 	@Override
 	public void paint(Graphics g) {
-		setScaffold();
-		Graphics2D g2D = (Graphics2D) g;
-		g2D.clearRect(0, 0, getWidth(), getHeight());  //Delete everything before update
+
+		setCameraOffset();
 
 		ArrayList<Data> data = model.getList();
 		ArrayList<Point2D> dataPoints = new ArrayList<Point2D>();
 		int numberOfEntries = model.getList().size();
 		int dim = model.getDim();
 		int axisDistance = WIDTH / dim;
+
+		Graphics2D g2D = (Graphics2D) g;
+		g2D.clearRect(0, 0, getWidth(), getHeight());  //Delete everything before update
 
 		//draw parallel axes (one for each label)
 		for(int a = 0; a < dim; a++){
@@ -95,9 +96,8 @@ public class View extends JPanel {
 			g2D.fillOval((int) point.getX(), (int) point.getY(), 3, 3);
 		}
 
+		//draw lines between points to make a path for each object
 		for(Point2D point : dataPoints) {
-
-			//labels.get(dataPoints.indexOf(point));
 			for(i = dataPoints.indexOf(point); i < dataPoints.size() - numberOfEntries; i++){
 				g2D.setColor(Color.BLUE);
 				connectionLine.setLine(dataPoints.get(i).getX(),dataPoints.get(i).getY(),
