@@ -53,36 +53,31 @@ public class View extends JPanel {
 			i += (WIDTH/dim);	//moves next label a bit to the right
 		}
 
-		int xValue = XOFFST;
-		ArrayList<Integer> xCoords = new ArrayList<>();
+		// x-Koordinate ist für jeden Eintrag pro Achse gleich;
+		// für die nächste Achse einfach axisDistance addieren
+		int xCoord = XOFFST;
 
-		for(int x = 0; x < dim; x++){
-			xCoords.add(xValue);
-			xValue += axisDistance;
-		}
-
-		//für jede Achse:
+		//y Daten für jede Achse bestimmen:
 		for(int y = 0; y < dim; y++){
-
 			ArrayList<Double> yData = new ArrayList<>();
 			for(Data d: data) {
 				yData.add(d.getValue(y));
-				//System.out.println(d.getValue(y));
+				System.out.println(d.getLabel());
+				System.out.println(d.getValue(y));
 			}
-			//System.out.println("-");
+			System.out.println("-");
 
-			AxisDataPara axisdata = new AxisDataPara(/*xCoords,*/ yData/*, axisDistance*/, HEIGHT);
-			ArrayList<Integer> yCoords = axisdata.getPointYCoordinates(y, YOFFST);
-			for(int a = 0; a < yCoords.size(); a++){
-				System.out.println(yCoords.get(a));
-			}
-			System.out.println("yCoords size: " + yCoords.size());
+			AxisDataPara axisdata = new AxisDataPara(yData, HEIGHT, YOFFST);
+			ArrayList<Integer> yCoords = axisdata.getPointYCoordinates();
 
 			//combine the coordinates to create points, store points in an array
-			for(int c = 0; c < xCoords.size(); c++){
-				Point2D dataPoint = new Point2D.Double(xCoords.get(c), yCoords.get(c));
+			for(int c = 0; c < yCoords.size(); c++){
+				Point2D dataPoint = new Point2D.Double(xCoord, yCoords.get(c));
 				dataPoints.add(dataPoint);
 			}
+
+			//für die nächste Achse: x Koordinate verschieben
+			xCoord += axisDistance;
 			
 		}
 		//draw point array
@@ -103,8 +98,7 @@ public class View extends JPanel {
 			}
 
 		}
-
-
+		
 
 	}
 	
