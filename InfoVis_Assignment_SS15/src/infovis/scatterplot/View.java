@@ -189,10 +189,10 @@ public class View extends JPanel {
 			for(Point2D point : dataPoints) {
 				if(markerRectangle.contains(point)){
 					//labels.get(dataPoints.indexOf(point));
-					for(i = dataPoints.indexOf(point) % numberOfEntries; i < dataPoints.size(); i += numberOfEntries){
+					for(int p = dataPoints.indexOf(point) % numberOfEntries; p < dataPoints.size(); p += numberOfEntries){
 						g2D.setColor(Color.ORANGE);
-						g2D.drawOval((int) dataPoints.get(i).getX(), (int) dataPoints.get(i).getY(), 3, 3);
-						g2D.fillOval((int) dataPoints.get(i).getX(), (int) dataPoints.get(i).getY(), 3, 3);
+						g2D.drawOval((int) dataPoints.get(p).getX(), (int) dataPoints.get(p).getY(), 3, 3);
+						g2D.fillOval((int) dataPoints.get(p).getX(), (int) dataPoints.get(p).getY(), 3, 3);
 					}
 				}
 			}

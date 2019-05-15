@@ -26,8 +26,8 @@ public class View extends JPanel {
 	private int coordOffset = 0;
 	private int clickedX = 0;
 	private int clickedY = 0;
-	private boolean pointClicked = false;
-	private boolean lineClicked = false;
+//	private boolean pointClicked = false;
+//	private boolean lineClicked = false;
 	private boolean sthClicked = false;
 
 	public void setClicked(int x, int y){
@@ -57,7 +57,7 @@ public class View extends JPanel {
 		int numberOfEntries = model.getList().size();
 		ArrayList<Data> data = model.getList();
 		ArrayList<Point2D> dataPoints = new ArrayList<Point2D>();
-		ArrayList<Line2D> connectionLines = new ArrayList<>();
+		ArrayList<ArrayList<Line2D>> connectionLines = new ArrayList<>();
 
 		Graphics2D g2D = (Graphics2D) g;
 		
@@ -81,7 +81,7 @@ public class View extends JPanel {
 		}
 
 		//x-coordinate is the same for each point on the same axis, for the next axis add axisDistance
-		int xCoord = XOFFST + coordOffset;		//cameraOffset is only added if camera data set is used
+		int xCoord = XOFFST + coordOffset;
 
 		//Calculate points for each axis:
 		for(int y = 0; y < dim; y++){
@@ -116,19 +116,24 @@ public class View extends JPanel {
 
 		//draw lines between points to make a path for each object
 		//Startpunkte liegen immer "number of Entries" auseinander:
+
 		for(int point = 0; point < numberOfEntries; point++){
+
 			int j = point;
+			ArrayList<Line2D> path = new ArrayList<>();
+
 			//einen Pfad pro Objekt zeichnen:
 			for(int counter = 0; counter < dim-1; counter ++){
 				g2D.setColor(Color.BLUE);
 
 				Line2D connectionLine = new Line2D.Double(dataPoints.get(j).getX(),dataPoints.get(j).getY(),
 						               dataPoints.get(j + numberOfEntries).getX(),dataPoints.get(j + numberOfEntries).getY());
-				connectionLines.add(connectionLine);
+				path.add(connectionLine);
 				g2D.draw(connectionLine);
 				//zum Punkt der nächsten Kategorie weitergehen:
 				j += numberOfEntries;
 			}
+			connectionLines.add(path);
 		}
 
 		// Highlighting a Path:
@@ -140,19 +145,22 @@ public class View extends JPanel {
 
 	}
 
-	public void highlightPath(ArrayList<Point2D> dataPoints, ArrayList<Line2D> connectionLines, int numberOfEntries, int dim, Graphics2D g2D){
+	public void highlightPath(ArrayList<Point2D> dataPoints, ArrayList<ArrayList<Line2D>> connectionLines, int numberOfEntries, int dim, Graphics2D g2D){
 		// If a point was clicked:
 		// (Problem: when points overlap there is only one path highlighted)
 		for(Point2D point: dataPoints){
 
+			//add a little tolerance to the clicked point
 			if ((Math.abs(point.getX()-clickedX) <= 5) && (Math.abs(point.getY()-clickedY) <= 5)){
 
-				pointClicked = true;
+				// every "number-of-entries"th point is the one we need for a path
 				for(int p = dataPoints.indexOf(point) % numberOfEntries; p < dataPoints.size(); p += numberOfEntries){
 
 					g2D.setColor(Color.ORANGE);
 					//g2D.drawOval((int) dataPoints.get(p).getX(), (int) dataPoints.get(p).getY(), 3, 3);
 					//g2D.fillOval((int) dataPoints.get(p).getX(), (int) dataPoints.get(p).getY(), 3, 3);
+
+					//highlight the lines between the right points:
 					if(p < dataPoints.size() - numberOfEntries){
 
 						Line2D connectionLine = new Line2D.Double(dataPoints.get(p).getX(),dataPoints.get(p).getY(),
@@ -162,32 +170,30 @@ public class View extends JPanel {
 					}
 				}
 				break;
-			}else{
-				pointClicked = false;
 			}
 		}
 
 
 		// If instead a line was clicked:
-		// NOT WORKING YET
 		//add a little tolerance to the clicked point
 		Rectangle2D clicked = new Rectangle(clickedX - 3, clickedY - 3, 6, 6);
+		g2D.setColor(Color.RED);
 		g2D.draw(clicked);
-		for(Line2D line : connectionLines){
-			System.out.println("line intersects rect: "+ line.intersects(clicked));
-			if(line.intersects(clicked)){
-				lineClicked = true;
-				for(int l = connectionLines.indexOf(line) % numberOfEntries; l < connectionLines.size(); l+= numberOfEntries){
 
-					g2D.setColor(Color.ORANGE);
-					g2D.draw(line);
+		for(ArrayList<Line2D> path: connectionLines){
+
+			//Wenn eine Line aus dem Pfad den geklickten Punkt schneidet:
+			for(Line2D line : path){
+				if(line.intersects(clicked)){
+					//alle Linien dieses Pfads highlighten
+					for(Line2D l : path){
+						g2D.setColor(Color.ORANGE);
+						g2D.draw(l);
+					}
+					break;
 				}
-				break;
-			}else{
-				lineClicked = false;
 			}
 		}
-
 	}
 	
 	public static void drawRotate(Graphics2D g2d, double x, double y, int angle, String text) {
