@@ -25,7 +25,7 @@ public class View extends JPanel {
 	private Line2D axis = new Line2D.Double(XOFFST, YOFFST, XOFFST, YOFFST + HEIGHT);
 	private ArrayList<Line2D> connectionLines = new ArrayList<>();
 	private Line2D connectionLine = new Line2D.Double(0,0,0,0);
-	private int cameraOffset = 0;
+	private int coordOffset = 0;
 	private int clickedX = 0;
 	private int clickedY = 0;
 	private boolean pointClicked = false;
@@ -36,13 +36,13 @@ public class View extends JPanel {
 		clickedY = y;
 	}
 
-	public void setCameraOffset(){
+	public void setCoordOffset(){
 		//for camera data the x coords of the points need to be shifted a wee bit to the right
 		if(model.getUsedFile().equals("cameras.ssv")){
-			cameraOffset = 6;
+			coordOffset = 6;
 		}
 		else{
-			cameraOffset = 1;
+			coordOffset = 1;
 		}
 	}
 
@@ -50,7 +50,7 @@ public class View extends JPanel {
 	public void paint(Graphics g) {
 		
 		//Calculate offset if camera data is used 
-		setCameraOffset();
+		setCoordOffset();
 		
 		int dim = model.getDim();
 		int axisDistance = WIDTH / dim;
@@ -80,7 +80,7 @@ public class View extends JPanel {
 		}
 
 		//x-coordinate is the same for each point on the same axis, for the next axis add axisDistance
-		int xCoord = XOFFST + cameraOffset;		//cameraOffset is only added if camera data set is used 
+		int xCoord = XOFFST + coordOffset;		//cameraOffset is only added if camera data set is used
 
 		//Calculate points for each axis:
 		for(int y = 0; y < dim; y++){
@@ -125,22 +125,27 @@ public class View extends JPanel {
 		}
 
 		// Highlighting a Path:
+		highlightPath(dataPoints, numberOfEntries, dim, g2D);
+
+	}
+
+	public void highlightPath(ArrayList<Point2D> dataPoints, int numberOfEntries, int dim, Graphics2D g2D){
 		// If a point was clicked:
-		// (Problem: when point overlap there is only one path highlighted)
+		// (Problem: when points overlap there is only one path highlighted)
 		for(Point2D point: dataPoints){
-			
+
 			if ((Math.abs(point.getX()-clickedX) <= 5) && (Math.abs(point.getY()-clickedY) <= 5)){
-				
+
 				pointClicked = true;
 				for(int p = dataPoints.indexOf(point) % numberOfEntries; p < dataPoints.size(); p += numberOfEntries){
-					
+
 					g2D.setColor(Color.ORANGE);
 					//g2D.drawOval((int) dataPoints.get(p).getX(), (int) dataPoints.get(p).getY(), 3, 3);
 					//g2D.fillOval((int) dataPoints.get(p).getX(), (int) dataPoints.get(p).getY(), 3, 3);
 					if(p <dataPoints.size() - numberOfEntries){
-						
+
 						connectionLine.setLine(dataPoints.get(p).getX(),dataPoints.get(p).getY(),
-						dataPoints.get(p + numberOfEntries).getX(),dataPoints.get(p + numberOfEntries).getY());
+								dataPoints.get(p + numberOfEntries).getX(),dataPoints.get(p + numberOfEntries).getY());
 						g2D.draw(connectionLine);
 					}
 				}
@@ -148,34 +153,34 @@ public class View extends JPanel {
 				pointClicked = false;
 			}
 		}
-		
-	
-		if(!pointClicked){
 
-			// If a line was clicked:
+
+		if(!pointClicked){
+			// If instead a line was clicked:
 			// NOT WORKING YET
 			for(Line2D line : connectionLines){
-				
+
 				//add a little tolerance to the clicked point
-				Rectangle2D clicked = new Rectangle(clickedX, clickedY, 4, 4);
+				Rectangle2D clicked = new Rectangle(clickedX - 2, clickedY - 2, 4, 4);
 				if(line.intersects(clicked)){
-					
+
 					lineClicked = true;
 					for(int l = connectionLines.indexOf(line) % dim; l < dim; l++){
-						
-					g2D.setColor(Color.ORANGE);
-					g2D.draw(line);
+
+						g2D.setColor(Color.ORANGE);
+						g2D.draw(line);
 					}
 				}
 				else{
 					lineClicked = false;
 				}
 			}
-			//If nothing was clicked repaint/remove everything 
+			//If nothing was clicked repaint/remove everything
 			if(!lineClicked){
 				repaint();
 			}
 		}
+
 	}
 	
 	public static void drawRotate(Graphics2D g2d, double x, double y, int angle, String text) {
