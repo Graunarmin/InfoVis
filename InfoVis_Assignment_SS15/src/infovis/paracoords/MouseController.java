@@ -28,16 +28,14 @@ public class MouseController implements MouseListener, MouseMotionListener {
 
 	}
 
-	public void mousePressed(MouseEvent e) {
-
+	public void mousePressed(MouseEvent event) {
 	}
 
 	public void mouseReleased(MouseEvent e) {
 
 	}
 
-	public void mouseDragged(MouseEvent e) {
-
+	public void mouseDragged(MouseEvent event) {
 	}
 
 	public void mouseMoved(MouseEvent e) {
