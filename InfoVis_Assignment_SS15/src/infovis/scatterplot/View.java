@@ -145,17 +145,17 @@ public class View extends JPanel {
 			}
 
 			//Matrix Zellen:
-			// (0,0) | (0,1) | (0,2) | (0,3) | ...
-			// (1,0) | (1,1) | (1,2) | (1,3) | ...
-			// (2,0) | (2,1) | (2,2) | (2,3) | ...
+			// (0,0) | (1,0) | (2,0) | (3,0) | ...
+			// (0,1) | (1,1) | (2,1) | (3,1) | ...
+			// (0,2) | (2,1) | (2,2) | (3,2) | ...
 			// ...
 
-			//run through the matrix line by line (cell index [x,y])
+			//run through the matrix row by row (cell index [x,y])
 			//In Zelle (0,0) sind die xDaten die Markteinführung und die yDaten auch.
-			//In Zelle (0,1) ist x dann Hubraum, y bleibt Markteinführung, in Zelle (0,2) ist x PS, y bleibt weiter Markteinführung usw.
-			//in der zweiten Zeile ändern sich dann die yDaten, das ist nun Hubraum, und wir gehen wieder alle anderen Kategorien für x durch
-			for(int y = 0; y < dim; y++){
-				for(int x = 0; x < dim; x++){
+			//In Zelle (0,1) ist y dann Hubraum, x bleibt Markteinführung, in Zelle (0,2) ist y PS, x bleibt weiter Markteinführung usw.
+			//in der zweiten Spalte ändern sich dann die xDaten, das ist nun Hubraum, und wir gehen wieder alle anderen Kategorien für y durch
+			for(int x = 0; x < dim; x++){
+				for(int y = 0; y < dim; y++){
 
 					//get the right combination of Data for each cell (identified by it's index)
 					ArrayList<Double> xData = new ArrayList<>();
@@ -182,13 +182,12 @@ public class View extends JPanel {
 			for(Point2D point : dataPoints) {
 				g2D.setColor(Color.BLUE);
 				g2D.drawOval((int) point.getX(), (int) point.getY(), 3, 3);
-				//g2D.fillOval((int) point.getX(), (int) point.getY(), 4, 4);
 			}
 
 			//change color of all corresponding points if point gets selected
 			for(Point2D point : dataPoints) {
 				if(markerRectangle.contains(point)){
-					//labels.get(dataPoints.indexOf(point));
+					//all the correspondig points BEFORE the clicked one have to be colored as well (by % numberOfEntries)
 					for(int p = dataPoints.indexOf(point) % numberOfEntries; p < dataPoints.size(); p += numberOfEntries){
 						g2D.setColor(Color.ORANGE);
 						g2D.drawOval((int) dataPoints.get(p).getX(), (int) dataPoints.get(p).getY(), 3, 3);

@@ -147,7 +147,6 @@ public class View extends JPanel {
 
 	public void highlightPath(ArrayList<Point2D> dataPoints, ArrayList<ArrayList<Line2D>> connectionLines, int numberOfEntries, int dim, Graphics2D g2D){
 		// If a point was clicked:
-		// (Problem: when points overlap there is only one path highlighted)
 		for(Point2D point: dataPoints){
 
 			//add a little tolerance to the clicked point
@@ -177,8 +176,8 @@ public class View extends JPanel {
 		// If instead a line was clicked:
 		//add a little tolerance to the clicked point
 		Rectangle2D clicked = new Rectangle(clickedX - 3, clickedY - 3, 6, 6);
-		g2D.setColor(Color.RED);
-		g2D.draw(clicked);
+//		g2D.setColor(Color.RED);
+//		g2D.draw(clicked);
 
 		for(ArrayList<Line2D> path: connectionLines){
 

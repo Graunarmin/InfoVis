@@ -62,9 +62,6 @@ public class View extends JPanel{
 	    
 	    paintDiagram(g2D);  //repaint to get second set of blobs
 
-		//Skalierung invertieren??
-		// g2D.scale(1/0.17, 1/0.17);
-
 	    //Marker
 	    g2D.setColor(Color.RED); //Sets frame of marker
 		updateMarker(0,0); //Adjusts marker to size of window
